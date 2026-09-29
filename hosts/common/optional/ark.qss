@@ -1,0 +1,51 @@
+QHeaderView {
+    background: transparent;
+    border: none;
+}
+
+QHeaderView::section {
+    background-color: transparent;
+    border: none;
+    padding: 6px 10px;
+    color: #a6adc8;
+    font-weight: 600;
+}
+
+QHeaderView::down-arrow, QHeaderView::up-arrow {
+    width: 10px;
+    height: 10px;
+}
+
+QTreeView {
+    border: none;
+    outline: none;
+    alternate-background-color: transparent;
+}
+
+QTreeView::item {
+    padding: 5px 4px;
+    border: none;
+}
+
+QTreeView::item:hover {
+    background: rgba(205, 214, 244, 0.07);
+    color: #cdd6f4;
+}
+
+QTreeView::item:selected {
+    background: rgba(245, 224, 220, 0.28);
+    color: #cdd6f4;
+}
+
+QTreeView::item:selected:hover {
+    background: rgba(245, 224, 220, 0.36);
+    color: #cdd6f4;
+}
+
+QDockWidget {
+    border: none;
+}
+
+QStatusBar {
+    border: none;
+}

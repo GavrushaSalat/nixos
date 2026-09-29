@@ -1,0 +1,243 @@
+input {
+    keyboard {
+        xkb {
+            layout "us,ru"
+            options "grp:win_space_toggle"
+        }
+    }
+
+    touchpad {
+        tap
+        natural-scroll
+        scroll-factor 0.5
+    }
+
+    mouse {
+        accel-speed -0.65
+        accel-profile "adaptive"
+    }
+
+    focus-follows-mouse
+    mod-key "Super"
+}
+
+// 15.6" 1920x1080 144Hz panel; no refresh rate given, so niri picks the highest
+output "eDP-1" {
+    mode "1920x1080"
+    position x=0 y=0
+    scale 1
+}
+
+workspace "1"
+workspace "2"
+workspace "3"
+
+layout {
+    center-focused-column "never"
+    default-column-width { proportion 1.0; }
+
+    border {
+        off
+    }
+
+    shadow {
+        on
+        softness 30
+        spread 5
+        offset x=0 y=5
+    }
+}
+
+cursor {
+    xcursor-theme "phinger-cursors-dark"
+    xcursor-size 24
+}
+
+environment {
+    XDG_CURRENT_DESKTOP "niri"
+    NIXOS_OZONE_WL "1"
+    TERMINAL "ghostty"
+}
+
+xwayland-satellite {
+    path "xwayland-satellite"
+}
+
+hotkey-overlay {
+    skip-at-startup
+}
+
+recent-windows {
+    open-delay-ms 0
+
+    binds {
+        Mod+Tab { next-window; }
+        Mod+Shift+Tab { previous-window; }
+    }
+}
+
+prefer-no-csd
+screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
+
+spawn-at-startup "wl-paste" "--type" "text" "--watch" "cliphist" "store"
+spawn-at-startup "wl-paste" "--type" "image" "--watch" "cliphist" "store"
+spawn-at-startup "zeditor"
+spawn-at-startup "firefox-nightly"
+spawn-at-startup "ghostty"
+spawn-at-startup "Telegram"
+spawn-at-startup "happ"
+spawn-sh-at-startup "$HOME/.config/niri/startup-layout.sh"
+
+window-rule {
+    match app-id=r#"^org\.quickshell$"#
+    match app-id=r#"^com\.danklinux\.dms$"#
+    open-floating true
+}
+
+window-rule {
+    match app-id=r#"^firefox-nightly$"# title="^Picture-in-Picture$"
+    open-floating true
+}
+
+window-rule {
+    match app-id=r#"^dev\.zed\.Zed$"#
+    open-on-workspace "1"
+}
+
+window-rule {
+    match app-id=r#"^firefox-nightly$"# at-startup=true
+    open-on-workspace "2"
+}
+
+window-rule {
+    match app-id=r#"^com\.mitchellh\.ghostty$"# at-startup=true
+    open-on-workspace "2"
+}
+
+window-rule {
+    match app-id=r#"^md\.Obsidian$"# at-startup=true
+    open-on-workspace "3"
+}
+
+window-rule {
+    match app-id=r#"^org\.telegram\.desktop$"# at-startup=true
+    open-on-workspace "3"
+}
+
+window-rule {
+    match app-id=r#"(?i)happ"# at-startup=true
+    open-on-workspace "3"
+}
+
+window-rule {
+    match app-id=r#"^com\.gabm\.satty$"#
+    open-floating true
+}
+
+window-rule {
+    match app-id=r#"^org\.kde\."#
+    geometry-corner-radius 12
+    clip-to-geometry true
+}
+
+layer-rule {
+    match namespace="^quickshell$"
+    match namespace="^dms$"
+    place-within-backdrop true
+}
+
+include "dms/colors.kdl"
+include "dms/layout.kdl"
+include "dms/alttab.kdl"
+
+binds {
+    Mod+Shift+Slash hotkey-overlay-title="Show All Shortcuts" { show-hotkey-overlay; }
+
+    Mod+T hotkey-overlay-title="Open Terminal" { spawn "ghostty"; }
+    Mod+D hotkey-overlay-title="DMS Spotlight" { spawn "dms" "ipc" "call" "spotlight" "toggle"; }
+    Mod+Alt+V hotkey-overlay-title="DMS Clipboard" { spawn "dms" "ipc" "call" "clipboard" "toggle"; }
+    Mod+E hotkey-overlay-title="Open File Manager" { spawn "dolphin"; }
+    Mod+B hotkey-overlay-title="Open Browser" { spawn "firefox-nightly"; }
+    Mod+Z hotkey-overlay-title="Open Zed" {spawn "zeditor"; }
+    Mod+Shift+S hotkey-overlay-title="Screenshot" { spawn-sh "$HOME/.config/niri/screenshot.sh"; }
+    Print hotkey-overlay-title="Screenshot" { spawn-sh "$HOME/.config/niri/screenshot.sh"; }
+
+    XF86AudioRaiseVolume allow-when-locked=true hotkey-overlay-title="Volume Up" { spawn "dms" "ipc" "call" "audio" "increment" "3"; }
+    XF86AudioLowerVolume allow-when-locked=true hotkey-overlay-title="Volume Down" { spawn "dms" "ipc" "call" "audio" "decrement" "3"; }
+    XF86AudioMute allow-when-locked=true hotkey-overlay-title="Mute Audio" { spawn "dms" "ipc" "call" "audio" "mute"; }
+    XF86AudioMicMute allow-when-locked=true hotkey-overlay-title="Mute Microphone" { spawn "wpctl" "set-mute" "@DEFAULT_AUDIO_SOURCE@" "toggle"; }
+    XF86MonBrightnessUp allow-when-locked=true hotkey-overlay-title="Brightness Up" { spawn "dms" "ipc" "call" "brightness" "increment" "5" "backlight:intel_backlight"; }
+    XF86MonBrightnessDown allow-when-locked=true hotkey-overlay-title="Brightness Down" { spawn "dms" "ipc" "call" "brightness" "decrement" "5" "backlight:intel_backlight"; }
+    XF86AudioNext allow-when-locked=true hotkey-overlay-title="Next Track" { spawn "playerctl" "next"; }
+    XF86AudioPause allow-when-locked=true hotkey-overlay-title="Play or Pause" { spawn "playerctl" "play-pause"; }
+    XF86AudioPlay allow-when-locked=true hotkey-overlay-title=null { spawn "playerctl" "play-pause"; }
+    XF86AudioPrev allow-when-locked=true hotkey-overlay-title="Previous Track" { spawn "playerctl" "previous"; }
+
+    Mod+O repeat=false hotkey-overlay-title="Toggle Overview" { toggle-overview; }
+    Mod+Q repeat=false hotkey-overlay-title="Close Window" { close-window; }
+    Mod+H hotkey-overlay-title="Focus Column Left" { focus-column-left; }
+    Mod+J hotkey-overlay-title="Focus Workspace Down (also Page Down / wheel)" { focus-workspace-down; }
+    Mod+K hotkey-overlay-title="Focus Workspace Up (also Page Up / wheel)" { focus-workspace-up; }
+    Mod+L hotkey-overlay-title="Focus Column Right" { focus-column-right; }
+
+    Mod+Home hotkey-overlay-title="Focus First Column" { focus-column-first; }
+    Mod+End hotkey-overlay-title="Focus Last Column" { focus-column-last; }
+    Mod+Shift+Home hotkey-overlay-title="Move Column to Start" { move-column-to-first; }
+    Mod+Shift+End hotkey-overlay-title="Move Column to End" { move-column-to-last; }
+
+    Mod+Shift+H hotkey-overlay-title="Move Column Left" { move-column-left; }
+    Mod+Shift+J hotkey-overlay-title="Send Window to Workspace Down (also Shift+Page Down)" { move-window-to-workspace-down; }
+    Mod+Shift+K hotkey-overlay-title="Send Window to Workspace Up (also Shift+Page Up)" { move-window-to-workspace-up; }
+    Mod+Shift+L hotkey-overlay-title="Move Column Right" { move-column-right; }
+
+    Mod+Page_Down hotkey-overlay-title=null { focus-workspace-down; }
+    Mod+Page_Up hotkey-overlay-title=null { focus-workspace-up; }
+    Mod+Shift+Page_Down hotkey-overlay-title=null { move-window-to-workspace-down; }
+    Mod+Shift+Page_Up hotkey-overlay-title=null { move-window-to-workspace-up; }
+
+    Mod+WheelScrollDown cooldown-ms=150 hotkey-overlay-title=null { focus-workspace-down; }
+    Mod+WheelScrollUp cooldown-ms=150 hotkey-overlay-title=null { focus-workspace-up; }
+    Mod+WheelScrollRight hotkey-overlay-title=null { focus-column-right; }
+    Mod+WheelScrollLeft hotkey-overlay-title=null { focus-column-left; }
+
+    Mod+1 hotkey-overlay-title="Focus Workspace 1–10" { focus-workspace 1; }
+    Mod+2 hotkey-overlay-title=null { focus-workspace 2; }
+    Mod+3 hotkey-overlay-title=null { focus-workspace 3; }
+    Mod+4 hotkey-overlay-title=null { focus-workspace 4; }
+    Mod+5 hotkey-overlay-title=null { focus-workspace 5; }
+    Mod+6 hotkey-overlay-title=null { focus-workspace 6; }
+    Mod+7 hotkey-overlay-title=null { focus-workspace 7; }
+    Mod+8 hotkey-overlay-title=null { focus-workspace 8; }
+    Mod+9 hotkey-overlay-title=null { focus-workspace 9; }
+    Mod+0 hotkey-overlay-title=null { focus-workspace 10; }
+
+    Mod+Shift+1 hotkey-overlay-title="Send Window to Workspace 1–10" { move-window-to-workspace 1; }
+    Mod+Shift+2 hotkey-overlay-title=null { move-window-to-workspace 2; }
+    Mod+Shift+3 hotkey-overlay-title=null { move-window-to-workspace 3; }
+    Mod+Shift+4 hotkey-overlay-title=null { move-window-to-workspace 4; }
+    Mod+Shift+5 hotkey-overlay-title=null { move-window-to-workspace 5; }
+    Mod+Shift+6 hotkey-overlay-title=null { move-window-to-workspace 6; }
+    Mod+Shift+7 hotkey-overlay-title=null { move-window-to-workspace 7; }
+    Mod+Shift+8 hotkey-overlay-title=null { move-window-to-workspace 8; }
+    Mod+Shift+9 hotkey-overlay-title=null { move-window-to-workspace 9; }
+    Mod+Shift+0 hotkey-overlay-title=null { move-window-to-workspace 10; }
+
+    Mod+R hotkey-overlay-title="Next Column Width Preset" { switch-preset-column-width; }
+    Mod+Shift+R hotkey-overlay-title="Previous Column Width Preset" { switch-preset-column-width-back; }
+    Mod+F hotkey-overlay-title="Maximize Column" { maximize-column; }
+    Mod+Shift+F hotkey-overlay-title="Toggle Fullscreen" { fullscreen-window; }
+    Mod+M hotkey-overlay-title="Maximize Window to Edges" { maximize-window-to-edges; }
+    Mod+Ctrl+F hotkey-overlay-title="Expand Column to Available Width" { expand-column-to-available-width; }
+    Mod+C hotkey-overlay-title="Center Column" { center-column; }
+    Mod+Ctrl+C hotkey-overlay-title="Center Visible Columns" { center-visible-columns; }
+    Mod+Minus hotkey-overlay-title="Decrease Column Width" { set-column-width "-10%"; }
+    Mod+Equal hotkey-overlay-title="Increase Column Width" { set-column-width "+10%"; }
+    Mod+V hotkey-overlay-title="Toggle Floating Window" { toggle-window-floating; }
+    Mod+Shift+V hotkey-overlay-title="Switch Floating or Tiling Focus" { switch-focus-between-floating-and-tiling; }
+
+    Mod+Escape allow-inhibiting=false hotkey-overlay-title="Restore Niri Shortcuts" { toggle-keyboard-shortcuts-inhibit; }
+    Mod+Shift+E hotkey-overlay-title="Exit Niri" { quit; }
+    Ctrl+Alt+Delete hotkey-overlay-title=null { quit; }
+    Mod+Shift+P hotkey-overlay-title="Power Off Monitors" { power-off-monitors; }
+    Mod+Ctrl+Shift+Delete allow-inhibiting=false hotkey-overlay-title="Shut Down" { spawn "systemctl" "poweroff"; }
+}
