@@ -17,7 +17,9 @@
   # Don't block boot waiting for network — services that need it retry on their own
   systemd.services.NetworkManager-wait-online.enable = lib.mkForce false;
 
-  services.automatic-timezoned.enable = true;
+  # Fixed zone: automatic-timezoned followed VPN geolocation and kept
+  # flipping the zone (and rewriting the local-time RTC shared with Windows)
+  time.timeZone = "Europe/Moscow";
   services.timesyncd.enable = true;
 
   i18n.defaultLocale = "en_GB.UTF-8";
