@@ -81,7 +81,7 @@ screenshot-path "~/Pictures/Screenshots/Screenshot from %Y-%m-%d %H-%M-%S.png"
 
 spawn-at-startup "wl-paste" "--type" "text" "--watch" "cliphist" "store"
 spawn-at-startup "wl-paste" "--type" "image" "--watch" "cliphist" "store"
-spawn-at-startup "zeditor"
+spawn-at-startup "dolphin"
 spawn-at-startup "firefox-nightly"
 spawn-at-startup "ghostty"
 spawn-at-startup "Telegram"
@@ -100,7 +100,7 @@ window-rule {
 }
 
 window-rule {
-    match app-id=r#"^dev\.zed\.Zed$"#
+    match app-id=r#"^org\.kde\.dolphin$"#
     open-on-workspace "1"
 }
 
@@ -114,10 +114,7 @@ window-rule {
     open-on-workspace "2"
 }
 
-window-rule {
-    match app-id=r#"^md\.Obsidian$"# at-startup=true
-    open-on-workspace "3"
-}
+
 
 window-rule {
     match app-id=r#"^org\.telegram\.desktop$"# at-startup=true
