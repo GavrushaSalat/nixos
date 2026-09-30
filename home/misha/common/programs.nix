@@ -8,6 +8,11 @@ in
 
   programs.git.enable = true;
 
+  programs.gh = {
+    enable = true;
+    gitCredentialHelper.enable = true;
+  };
+
   programs.firefox = {
     enable = true;
     package = pkgs.firefox-nightly-bin;

@@ -14,7 +14,6 @@
     ghgrab
     gnumake
     go
-    gh
     manix
     gcc
     gradle
