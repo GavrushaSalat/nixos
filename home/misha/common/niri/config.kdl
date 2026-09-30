@@ -114,8 +114,6 @@ window-rule {
     open-on-workspace "2"
 }
 
-
-
 window-rule {
     match app-id=r#"^org\.telegram\.desktop$"# at-startup=true
     open-on-workspace "3"

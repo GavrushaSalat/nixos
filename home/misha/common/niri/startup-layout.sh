@@ -2,14 +2,13 @@
 set -uo pipefail
 
 read_app_ids() {
-  IFS='|' read -r firefox ghostty obsidian telegram happ < <(
+  IFS='|' read -r firefox ghostty telegram happ < <(
     jq -r '
       def first_id(re):
         [.[] | select((.app_id // "") | test(re; "i"))][0].id // "";
       [
         first_id("^firefox-nightly$"),
         first_id("^com\\.mitchellh\\.ghostty$"),
-        first_id("^md\\.Obsidian$"),
         first_id("^org\\.telegram\\.desktop$"),
         first_id("happ")
       ] | join("|")
@@ -29,11 +28,11 @@ for ((attempt = 0; attempt < 30; attempt++)); do
   fi
 
   read_app_ids
-  signature="$firefox|$ghostty|$obsidian|$telegram|$happ"
+  signature="$firefox|$ghostty|$telegram|$happ"
 
-  if [[ -n "$firefox" && -n "$ghostty" && -n "$obsidian" && -n "$telegram" && -n "$happ" ]]; then
+  if [[ -n "$firefox" && -n "$ghostty" && -n "$telegram" && -n "$happ" ]]; then
     break
-  elif [[ "$signature" == "$last_signature" && "$signature" != "||||" ]]; then
+  elif [[ "$signature" == "$last_signature" && "$signature" != "|||" ]]; then
     stable_polls=$((stable_polls + 1))
     [[ $stable_polls -ge 10 ]] && break
   else
@@ -61,9 +60,9 @@ arrange_columns() {
   done
 }
 
-# Workspace 2: browser, terminal. Workspace 3: notes, chat, VPN.
+# Workspace 2: browser, terminal. Workspace 3: chat, VPN.
 arrange_columns "$firefox" "$ghostty"
-arrange_columns "$obsidian" "$telegram" "$happ"
+arrange_columns "$telegram" "$happ"
 
 if [[ -n "$previous_window" ]]; then
   niri msg action focus-window --id "$previous_window" >/dev/null 2>&1 || true

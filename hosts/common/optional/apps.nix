@@ -25,6 +25,7 @@ in
     unstable.kdePackages.ffmpegthumbs
     unstable.kdePackages.kdegraphics-thumbnailers
     unstable.kdePackages.gwenview
+    unstable.kdePackages.kclock
     arkStyled
     unstable.kdePackages.kimageformats
     unstable.kdePackages.qtimageformats
